@@ -11,6 +11,8 @@ from datetime import datetime, timedelta
 from dotenv import load_dotenv
 from typing import List, Dict
 import logging
+import threading
+from http.server import HTTPServer, BaseHTTPRequestHandler
 
 # Load environment variables
 load_dotenv()
@@ -292,12 +294,34 @@ class DiscordBot(commands.Bot):
         # Process commands
         await self.process_commands(message)
 
+class HealthCheckHandler(BaseHTTPRequestHandler):
+    def do_GET(self):
+        if self.path == '/':
+            self.send_response(200)
+            self.send_header('Content-type', 'text/plain')
+            self.end_headers()
+            self.wfile.write(b'AI News Aggregator Bot is running!')
+        else:
+            self.send_response(404)
+            self.end_headers()
+
+def start_health_server():
+    """Start a simple HTTP server for health checks"""
+    port = int(os.getenv('PORT', 8080))
+    server = HTTPServer(('0.0.0.0', port), HealthCheckHandler)
+    logger.info(f"Health check server started on port {port}")
+    server.serve_forever()
+
 def main():
     """Main function to run the bot"""
     bot_token = os.getenv('DISCORD_BOT_TOKEN')
     if not bot_token:
         logger.error("Discord bot token not found!")
         return
+    
+    # Start health check server in a separate thread
+    health_thread = threading.Thread(target=start_health_server, daemon=True)
+    health_thread.start()
     
     bot = DiscordBot()
     
