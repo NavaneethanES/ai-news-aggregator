@@ -1,0 +1,17 @@
+# Reddit API (Optional - can work without)
+REDDIT_CLIENT_ID=your_reddit_client_id
+REDDIT_CLIENT_SECRET=your_reddit_client_secret
+REDDIT_USER_AGENT=AI_News_Bot/1.0
+
+# NewsAPI.org
+NEWS_API_KEY=your_newsapi_key
+
+# OpenAI API
+OPENAI_API_KEY=your_openai_api_key
+
+# Discord Bot
+DISCORD_BOT_TOKEN=your_discord_bot_token
+DISCORD_CHANNEL_ID=your_discord_channel_id
+
+# Optional: Customize news sources
+AI_KEYWORDS=artificial intelligence,AI,machine learning,deep learning,OpenAI,GPT,LLM,neural network
